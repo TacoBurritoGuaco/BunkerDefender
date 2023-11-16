@@ -24,7 +24,7 @@ Description:
 
 //======= Initializing variables  =======//
 int score; //score value
-String screen; //changes the screen to a different screen
+String gameState; //changes the screen to a different screen
 
 //boolean drawnGrass; //Boolean that checks if the grass has been drawn
 
@@ -43,18 +43,16 @@ Husk[] huskList = new Husk[5]; //List of husks
 Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
-//Fleshy theOneFleshy;
-//Was going to add a fleshy cube monster, as the plans show, but given the time? that is simply NOT possible
-//There is just something NOT working correctly there. I've been trying to implement his x and y movement but it is simply just NOT working
-//As such, I have made the decision to cut him from the final version
-//this will still meet EVERY requirement, it will just not include fleshy
-//I hope thats alright, sorry I couldn't figure it out D:
+//Sets up a list that stores all the enemies by storing their different lists
+//Might be easier to just use for loops here?
+ArrayList<Enemy> allEnemies = new ArrayList<Enemy>();
+allEnemies.add(huskList);
+allEnemies.add(ocList);
 
 //======= Setup! =======//
 void setup(){
   size(400, 400); //size of the canvas (screen)
-  
-  screen = "Reset"; //sets the screen to the setup screen before the game starts!
+  gameState = "Reset"; //sets the screen to the setup screen before the game starts!
 
 }
 
@@ -63,115 +61,125 @@ void draw(){
   frameRate(60); //sets the frame rate for timers
   noStroke(); //Set no stroke as the default for shapes (has to be specified)
   
-  if (screen == "Reset"){ //SETUP BEFORE GAME
-  score = 0; //score is set to 0 at default
+  //Changing the chain of if statements to a switch statement for optimization
+  //Works exactly the same except it uses a switch now
+  //Also renamed the variable to make it easier to follow
   
-  bulletNumber = 3; //default number of bulleta
-  bulletReload = 0; //counts up to 1.5 seconds by default
-  bulletDelay = 0; //counts up to a quarter of a second of delay by default
-  bulletOut = false; //set to false by default
+  //SETUP BEFORE GAME
+  switch (gameState){ 
+    case "Reset": 
+      score = 0; //score is set to 0 at default
   
-  mouseHasBeenPressed = true; //set to true by default to prevent players from spending a bullet right at the game's start
-  
-  //Sets the center PVector()'s default positoon
-  centerPos.x = 200;
-  centerPos.y = 200;
-  
-  //For loop that adds all the husks to the program
-  for (int i = 0; i < huskList.length; i+=1){
-    
-    //Credit to asimes https://forum.processing.org/one/topic/how-to-pick-random-value-from-array.html for explaining how to make random choices base on arrays
-    float posList[] = {random(410, 420) , random(-10, -20)}; //Chooses a random X or Y Value past 400, or a random X or Y Value off screen past 0 (negative)
-    
-    //Below is an if statement that works based on increased chances of husks coming from the left/right of the screen rather than the bottom/top
-    if (random(0, 10) > 4){
-      huskList[i] = new Husk(posList[int(random(0, 2))], random(0, 400)); //chooses a random number for the x-value from the array, one which will be on the right, and the other on the left
-      //Chooses a Y-value between 0 and 400
-      //Creates a new husk in these coordinates
-    } else {
-      huskList[i] = new Husk(random(0, 400), posList[int(random(0, 2))]); //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
-      //Chooses a X-value between 0 and 400
-      //Creates a new husk in these coordinates
-    }
-  }
-  
-  //For loop that adds all the Oculus to the program
-  for (int i = 0; i < ocList.length; i+=1){
-    
-    //Credit to asimes https://forum.processing.org/one/topic/how-to-pick-random-value-from-array.html for explaining how to make random choices base on arrays
-    float posList[] = {random(550, 560) , random(-150, -160)}; //Chooses a random X or Y Value past 400, or a random X or Y Value off screen past 0 (negative)
-    
-    //Below is an if statement that works based on increased chances of Oculus coming from the bottom/top of the screen rather than the left/right
-    if (random(0, 10) > 2){
-      ocList[i] = new Oculus(random(0, 400), posList[int(random(0, 2))]); //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
-      //Chooses a X-value between 0 and 400
-      //Creates a new oculus in these coordinates
-    } else {
-      ocList[i] = new Oculus(posList[int(random(0, 2))], random(0, 400)); //chooses a random number for the x-value from the array, one which will be on the right, and the other on the left
-      //Chooses a Y-value between 0 and 400
-      //Creates a new oculus in these coordinates
-    }
-    
-    screen = "GameStart"; //sets the screen to game start, and therefore, starts the game!
-  }
-    
-  }if (screen == "GameStart"){ //MAIN GAME
-    background(193, 154, 107); //sets the background base color
-    
-    drawBunk(); //draws the titular bunker in the middle of the screen!
-    
-    //For loop that draws and moves all the husks
-    for (int i = 0; i < huskList.length; i+=1){
-      huskList[i].drawHusk();
-      huskList[i].move(centerPos);
-    }
-    //For loop that draws and moves all the oculus
-    for (int i = 0; i < ocList.length; i+=1){
-      ocList[i].drawOculus();
-      ocList[i].move(centerPos);
-    }
-    //draws the one fleshy
-    //theOneFleshy.drawFleshy();
-    //Moves the one fleshy
-    //theOneFleshy.move(centerPos);
-    
-    drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
-    
-    bulletShot(); //function that detects when a bullet has been shot by the player, and either delays when the next bullet can be shot, or gives reloading more bullets (if they run out) delay.
-    //previously an if statement, but was turned into a function for significantly better code readability
-    
-    drawBullets(bulletNumber); //draws the bullet ui
-    
-    fill(255);
-    textSize(35);
-    text("score: " + score, 10, 30); //score text that updates with every succesful kill
-    
-    //For loop that checks if a husk has reached the bunker
-    for (int i = 0; i < huskList.length; i+=1){
-      if (huskList[i].enemyReachedBase(centerPos) == true){
-        screen = "GameOver";
+      bulletNumber = 3; //default number of bulleta
+      bulletReload = 0; //counts up to 1.5 seconds by default
+      bulletDelay = 0; //counts up to a quarter of a second of delay by default
+      bulletOut = false; //set to false by default
+      
+      mouseHasBeenPressed = true; //set to true by default to prevent players from spending a bullet right at the game's start
+      
+      //Sets the center PVector()'s default positoon
+      centerPos.x = 200;
+      centerPos.y = 200;
+      
+      //For loop that adds all the husks to the program
+      for (int i = 0; i < huskList.length; i+=1){
+        
+        //Credit to asimes https://forum.processing.org/one/topic/how-to-pick-random-value-from-array.html for explaining how to make random choices base on arrays
+        float posList[] = {random(410, 420) , random(-10, -20)}; //Chooses a random X or Y Value past 400, or a random X or Y Value off screen past 0 (negative)
+        
+        //Below is an if statement that works based on increased chances of husks coming from the left/right of the screen rather than the bottom/top
+        if (random(0, 10) > 4){
+          huskList[i] = new Husk(posList[int(random(0, 2))], random(0, 400)); //chooses a random number for the x-value from the array, one which will be on the right, and the other on the left
+          //Chooses a Y-value between 0 and 400
+          //Creates a new husk in these coordinates
+        } else {
+          huskList[i] = new Husk(random(0, 400), posList[int(random(0, 2))]); //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
+          //Chooses a X-value between 0 and 400
+          //Creates a new husk in these coordinates
+        }
       }
-    }
-    //For loop that checks if an oculus has reached the bunker
-    for (int i = 0; i < ocList.length; i+=1){
-      if (ocList[i].enemyReachedBase(centerPos) == true){
-        screen = "GameOver";
+      
+      //For loop that adds all the Oculus to the program
+      for (int i = 0; i < ocList.length; i+=1){
+        
+        //Credit to asimes https://forum.processing.org/one/topic/how-to-pick-random-value-from-array.html for explaining how to make random choices base on arrays
+        float posList[] = {random(550, 560) , random(-150, -160)}; //Chooses a random X or Y Value past 400, or a random X or Y Value off screen past 0 (negative)
+        
+        //Below is an if statement that works based on increased chances of Oculus coming from the bottom/top of the screen rather than the left/right
+        if (random(0, 10) > 2){
+          ocList[i] = new Oculus(random(0, 400), posList[int(random(0, 2))]); //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
+          //Chooses a X-value between 0 and 400
+          //Creates a new oculus in these coordinates
+        } else {
+          ocList[i] = new Oculus(posList[int(random(0, 2))], random(0, 400)); //chooses a random number for the x-value from the array, one which will be on the right, and the other on the left
+          //Chooses a Y-value between 0 and 400
+          //Creates a new oculus in these coordinates
+        }
       }
-    }
-  } if (screen == "GameOver") { //GAME OVER SCREEN
-    background(0);
+        
+        gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
+        break;
     
-    drawBunk(); //draws the titular bunker in the middle of the screen! (Except now you are dead so its not as cool)
-    //Note: This is done on purpose to make the game over screen feel a little more alive
-    
-    textAlign(CENTER); //sets textAlign to center
-    fill(255);
-    textSize(40);
-    text("Final score: " + score, 200, 100); //The final score, displayed in the middle of the screen
-    textAlign(CORNER); //resets textAlign back to default
-    
-    drawButton(200, 300, 80, 80); //draws the button that resets the game using the draw button function (simplified from goopLab)
-  }
+  //MAIN GAME
+    case "GameStart":
+      background(193, 154, 107); //sets the background base color
+      
+      drawBunk(); //draws the titular bunker in the middle of the screen!
+      
+      //For loop that draws and moves all the husks
+      for (int i = 0; i < huskList.length; i+=1){
+        huskList[i].drawHusk();
+        huskList[i].move(centerPos);
+      }
+      //For loop that draws and moves all the oculus
+      for (int i = 0; i < ocList.length; i+=1){
+        ocList[i].drawOculus();
+        ocList[i].move(centerPos);
+      }
+      //draws the one fleshy
+      //theOneFleshy.drawFleshy();
+      //Moves the one fleshy
+      //theOneFleshy.move(centerPos);
+      
+      drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
+      
+      mousePressed(); //remove later
+      
+      drawBullets(bulletNumber); //draws the bullet ui
+      
+      fill(255);
+      textSize(35);
+      text("score: " + score, 10, 30); //score text that updates with every succesful kill
+      
+      //For loop that checks if a husk has reached the bunker
+      for (int i = 0; i < huskList.length; i+=1){
+        if (huskList[i].enemyReachedBase(centerPos) == true){
+          gameState = "GameOver";
+        }
+      }
+      //For loop that checks if an oculus has reached the bunker
+      for (int i = 0; i < ocList.length; i+=1){
+        if (ocList[i].enemyReachedBase(centerPos) == true){
+          gameState = "GameOver";
+        }
+      }
+      break;
+
+    case ("GameOver"):
+      background(0);
+
+      drawBunk(); //draws the titular bunker in the middle of the screen! (Except now you are dead so its not as cool)
+      //Note: This is done on purpose to make the game over screen feel a little more alive
+      
+      textAlign(CENTER); //sets textAlign to center
+      fill(255);
+      textSize(40);
+      text("Final score: " + score, 200, 100); //The final score, displayed in the middle of the screen
+      textAlign(CORNER); //resets textAlign back to default
+      
+      drawButton(200, 300, 80, 80); //draws the button that resets the game using the draw button function (simplified from goopLab)
+      break;
+   }
 }
 
 //======= return score function =======//
@@ -196,63 +204,7 @@ void drawMark(){
   rect(mouseX - 2, mouseY - 30, 5, 60);
 }
 
-//======= Shooting Bullets Function =======//
-//function that updates the number of bullets whenever the mouse is pressed
-//It also prevents bullets from "being fired" if the delay if statement has not turned the mouseHasBeenpressed boolean back to false
-//This is done to prevent all the bullets from instantly being used
-//Additionally, when all bullets are spent, it also prevents the user from shooting, with a significantly longer delay
-//This is done to make the user carefully choose when to and when not to shoot bullets.
-//Whats also important is, that this statement additionally detects when the player makes a valid shot
-//as such, its secondary use is to detect if the player has succesfully shot an enemy
-void bulletShot(){
-  if (mousePressed){ //if the mouse is pressed
-    if (bulletOut == false){ //if the player is not out of bullets
-      if (mouseHasBeenPressed == false){ //if the player has fired a bullet beforehand
-        
-        //For loop that checks if a husk was shot and which husk was shot
-        for (int i = 0; i < huskList.length; i+=1){
-          if (huskList[i].beenShot(mouseX, mouseY) == true){
-            score += huskList[i].returnPoints(); //update the score if a husk has been succesfully killed
-          }
-        }
-        //For loop that checks if an oculus was shot and which oculus was shot
-        for (int i = 0; i < ocList.length; i+=1){
-          if (ocList[i].beenShot(mouseX, mouseY) == true){
-            score += ocList[i].returnPoints(); //likewise, update the score if an oculus has been killed
-          }
-        }
-        //Check if the one fleshy has been shot
-        //theOneFleshy.beenShot(mouseX, mouseY);
-        
-        bulletNumber -= 1; //always reduces the number of bullets
-        mouseHasBeenPressed = true; //sets this boolean to true for delay
-        if (bulletNumber <= 0){ //if the bullets are out
-          bulletOut = true; //set reload boolean to true
-        }
-      }
-    }
-  }
-  
-  //If statement that adds slight delay between each shot of the sniper
-  if (mouseHasBeenPressed == true){
-    bulletDelay += 1;
-    if (bulletDelay >= 15){
-      mouseHasBeenPressed = false;
-      bulletDelay = 0; //resets bullet delay
-    }
-  }
-  
-  //If statement that adds delay between bullet reloads
-  //Only relevant whenever the user is out of bullets
-  if (bulletOut == true){
-    bulletReload += 1;
-    if (bulletReload >= 90){
-      bulletOut = false;
-      bulletNumber = 3; //resets the number of bullets after reload delay
-      bulletReload = 0; //resets bullet delay
-    }
-  }
-}
+
 
 //======= Bullet Function =======//
 void drawBullets(int bNum){
@@ -332,7 +284,7 @@ void drawButton(int coordX, int coordY, int buttonWidth, int buttonHeight) {
 
   if (mouseIsOver(coordX, coordY, buttonWidth, buttonHeight)) {
     if (mousePressed) {
-      screen = "Reset"; //This is the biggest new addition to this code
+      gameState = "Reset"; //This is the biggest new addition to this code
       //It sets the screen mode to "reset", which resets every variable and enemy back to their original positions set in setup
       //As such, everything that would otherwise be in setup can simply be moved to reset instead, saving space (other than the canvas size and the screenMode itself)
       
@@ -375,3 +327,64 @@ boolean mouseIsOver(int clickX, int clickY, int clickWidth, int clickHeight) {
 //I am, also, cutting this one
 //void drawGrass(){
 //}
+
+
+//======= Shooting Bullets Function (Now in MousePressed())=======//
+//function that updates the number of bullets whenever the mouse is pressed
+//It also prevents bullets from "being fired" if the delay if statement has not turned the mouseHasBeenpressed boolean back to false
+//This is done to prevent all the bullets from instantly being used
+//Additionally, when all bullets are spent, it also prevents the user from shooting, with a significantly longer delay
+//This is done to make the user carefully choose when to and when not to shoot bullets.
+//Whats also important is, that this statement additionally detects when the player makes a valid shot
+//as such, its secondary use is to detect if the player has succesfully shot an enemy
+//NOTE: I have moved the function's, well, functionality to mousePressed() as reccomended previously
+
+void mousePressed(){
+    if (mousePressed){ //REMOVE LATER
+    if (bulletOut == false){ //if the player is not out of bullets
+      if (mouseHasBeenPressed == false){ //if the player has fired a bullet beforehand
+        
+        //For loop that checks if a husk was shot and which husk was shot
+        for (int i = 0; i < huskList.length; i+=1){
+          if (huskList[i].beenShot(mouseX, mouseY) == true){
+            score += huskList[i].returnPoints(); //update the score if a husk has been succesfully killed
+          }
+        }
+        //For loop that checks if an oculus was shot and which oculus was shot
+        for (int i = 0; i < ocList.length; i+=1){
+          if (ocList[i].beenShot(mouseX, mouseY) == true){
+            score += ocList[i].returnPoints(); //likewise, update the score if an oculus has been killed
+          }
+        }
+        //Check if the one fleshy has been shot
+        //theOneFleshy.beenShot(mouseX, mouseY);
+        
+        bulletNumber -= 1; //always reduces the number of bullets
+        mouseHasBeenPressed = true; //sets this boolean to true for delay
+        if (bulletNumber <= 0){ //if the bullets are out
+          bulletOut = true; //set reload boolean to true
+        }
+      }
+    }
+  }
+  
+  //If statement that adds slight delay between each shot of the sniper
+  if (mouseHasBeenPressed == true){
+    bulletDelay += 1;
+    if (bulletDelay >= 15){
+      mouseHasBeenPressed = false;
+      bulletDelay = 0; //resets bullet delay
+    }
+  }
+  
+  //If statement that adds delay between bullet reloads
+  //Only relevant whenever the user is out of bullets
+  if (bulletOut == true){
+    bulletReload += 1;
+    if (bulletReload >= 90){
+      bulletOut = false;
+      bulletNumber = 3; //resets the number of bullets after reload delay
+      bulletReload = 0; //resets bullet delay
+    }
+  }
+}
