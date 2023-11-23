@@ -40,28 +40,12 @@ class Enemy{
   }
   
   void resetEnemy(){
-    //default Position (input value)
-    //Change to a public function that returns the player's pVector position 
-    enemyPos.x = x; 
-    enemyPos.y = y;
-    //default speed
+    //resets to default speed
     enemySpeed.x = 0.3;
-    enemySpeed.y = 0.3;
-    //default acceleration
-    enemyAcc.x = 0.001;
-    enemyAcc.y = 0.001;
-    
-    //sets to default enemy length and width
-    enemyLength = 20;
-    enemyWidth = 10;
-    
-    points = int(random(0 + randRange, 5 + randRange)); //sets the points the enemy will give to a random value 
-    health = 1; //sets health to a default of 1
-    randRange = 40; //the default range added/substracted from the random values in the "beenShot" function
-    //Additionally, randRange determined how many points an enemy will give you
-    weightChance = 4; //the default weight of the enemy spawns
+    enemySpeed.y = 0.3; 
+    points = int(random(0 + randRange, 5 + randRange)); //Resets how many points the enemy gives
+    health = 1; //resets the enemy's health
   }
-  
   
   //Called whenever an enemy is shot. Uses the player object's current pVector x and y coordinates
   boolean beenShot(){
@@ -82,6 +66,7 @@ class Enemy{
         enemyPos.x = random(0, 400); //Chooses a X-value between 0 and 400
         enemyPos.y = posList[int(random(0, 2))]; //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
       }
+      this.resetEnemy();
       return true; //returns true
     }
     return false; //returns false by default
