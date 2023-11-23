@@ -7,6 +7,10 @@ public class Player{
     this.playerPos.y = 200;
   }
   
+  void drawPlayer(){
+    
+  }
+  
   void movePlayer(char theKey){
     switch(theKey){
       case('w'): this.playerPos.y -= 2;

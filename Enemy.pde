@@ -16,12 +16,18 @@ class Enemy{
   float randRange; //value that determines the range of the random values being inputted
   float weightChance; //value that weights the chance for the enemy to spawn either from the sides or from the top
   
-  //Initializes the husk
+  //Initializes the enemy
   Enemy(){
+    
+    health = 1; //sets health to a default of 1
+    randRange = 40; //the default range added/substracted from the random values in the "beenShot" function
+    points = int(random(0 + randRange, 5 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
+    weightChance = 4; //the default weight of the enemy spawns
+    
     //default Position (input value)
     //Change to a public function that returns the player's pVector position 
-    enemyPos.x = x; 
-    enemyPos.y = y;
+    enemyPos.x = enemyLoc(randRange, weightChance).x; 
+    enemyPos.y = enemyLoc(randRange, weightChance).y;
     //default speed
     enemySpeed.x = 0.3;
     enemySpeed.y = 0.3;
@@ -32,11 +38,6 @@ class Enemy{
     //sets to default enemy length and width
     enemyLength = 20;
     enemyWidth = 10;
-    
-    points = 0; //sets point to 0 by default (since the points are not called until they are randomized again)
-    health = 1; //sets health to a default of 1
-    randRange = 40; //the default range added/substracted from the random values in the "beenShot" function
-    weightChance = 4; //the default weight of the enemy spawns
   }
   
   void resetEnemy(){
@@ -49,24 +50,12 @@ class Enemy{
   
   //Called whenever an enemy is shot. Uses the player object's current pVector x and y coordinates
   boolean beenShot(){
-    
-    float x = mouseX;
-    float y = mouseY;
-    
-    //If statement that checks if the mouse is within a specific radius of the enemy
-    if ((x <= (enemyPos.x + enemyWidth) && x >= (enemyPos.x - enemyWidth)) && (y <= (enemyPos.y + enemyLength) && y >= (enemyPos.y - enemyLength))){
-      //Credit to asimes https://forum.processing.org/one/topic/how-to-pick-random-value-from-array.html for explaining how to make random choices base on arrays
-      float posList[] = {random(400 + randRange, 420 + randRange) , random(0 - randRange, -20 - randRange)}; //Chooses a random X or Y Value past 400, or a random X or Y Value off screen past 0 (negative)
-      
-      //Below is an if statement that works based on increased chances of husks coming from the left/right of the screen rather than the bottom/top
-      if (random(0, 10) > weightChance){
-        enemyPos.x = posList[int(random(0, 2))]; //chooses a random number for the x-value from the array, one which will be on the right, and the other on the left
-        enemyPos.y = random(0, 400); //Chooses a Y-value between 0 and 400
-      } else {
-        enemyPos.x = random(0, 400); //Chooses a X-value between 0 and 400
-        enemyPos.y = posList[int(random(0, 2))]; //chooses a random number for the y-value from the array, one which will be on the bottom, and the other on the top
-      }
-      this.resetEnemy();
+    //if statement that determines if the mouse is within the enemy's hitbox
+    if ((mouseX <= (this.enemyPos.x + this.enemyWidth) && mouseX >= (this.enemyPos.x - this.enemyWidth)) && (mouseY <= (this.enemyPos.y + this.enemyLength) && mouseY >= (this.enemyPos.y - this.enemyLength))){
+      //When called, sets this enemy's position to a random position off-screen
+      this.enemyPos.x = enemyLoc(randRange, weightChance).x;
+      this.enemyPos.y = enemyLoc(randRange, weightChance).y;
+      resetEnemy(); //resets this enemy's variables
       return true; //returns true
     }
     return false; //returns false by default
@@ -79,7 +68,7 @@ class Enemy{
   
   //returns true or false depending on if the enemy has reached the player's PVector() position
   boolean enemyReachedPlayer(){
-    if ((center.x <= (huskPos.x + enemyWidth) && center.x >= (huskPos.x - enemyWidth)) && (center.y <= (huskPos.y + enemyLength) && center.y >= (huskPos.y - enemyLength))){ //is the enemy overlaping the player
+    if ((playerPos.x <= (this.enemyPos.x + this.enemyWidth) && playerPos.x >= (this.enemyPos.x - this.enemyWidth)) && (playerPos.y <= (this.enemyPos.y + this.enemyLength) && playerPos.y >= (this.enemyPos.y - this.enemyLength))){ //is the enemy overlaping the player
       return true;
     }
     return false;
