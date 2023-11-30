@@ -46,7 +46,9 @@ Husk[] huskList = new Husk[5]; //List of husks
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
 ArrayList<Enemy> allEnemies = new ArrayList<Enemy>();
-allEnemies.add(huskList);
+for (int i = 0; i < huskList.length; i+=1) {
+  allEnemies.add(huskList[i]);
+}
 //allEnemies.add(ocList);
 
 //======= Setup! =======//
