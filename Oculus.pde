@@ -5,7 +5,7 @@
 class Oculus extends Enemy {
 
   //Initializes the oculus
-  @Override Enemy() {
+  Oculus() {
     super();
     randRange = 80; //the default range added/substracted from the random values in the "beenShot" function
     points = int(random(0 + randRange, 10 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
@@ -16,8 +16,7 @@ class Oculus extends Enemy {
     enemySpeed.y = 0.5;
 
     //sets the enemy's location
-    enemyPos.x = enemyLoc(randRange, weightChance).x;
-    enemyPos.y = enemyLoc(randRange, weightChance).y;
+    enemyPos = enemyLoc(randRange, weightChance);
 
     //sets to default enemy length and width
     enemyLength = 25;
@@ -35,14 +34,14 @@ class Oculus extends Enemy {
   @Override void drawEnemy() {
 
     fill(136, 8, 8); //blood red
-    quad(ocPos.x - 15, ocPos.y, ocPos.x, ocPos.y - 25, ocPos.x + 15, ocPos.y, ocPos.x, ocPos.y + 25); //diamond drawn behind the eye of the oculus
+    quad(enemyPos.x - 15, enemyPos.y, enemyPos.x, enemyPos.y - 25, enemyPos.x + 15, enemyPos.y, enemyPos.x, enemyPos.y + 25); //diamond drawn behind the eye of the oculus
 
     fill(245); //greyish white for the eye
 
-    circle(ocPos.x, ocPos.y, 30); //eye
+    circle(enemyPos.x, enemyPos.y, 30); //eye
 
     fill(0);
-    circle((mouseX/20)+(ocPos.x - 9), (mouseY/20)+(ocPos.y - 9), 5); //pupil
+    circle((mouseX/20)+(enemyPos.x - 9), (mouseY/20)+(enemyPos.y - 9), 5); //pupil
     //The pupil works the same way as the froggyFly pupils.
   }
 
@@ -63,8 +62,8 @@ class Oculus extends Enemy {
     //However, this vector also accounts for the position of the mouse, and will attempt to move away from the mouse while still heading towards the center
     //It will do this by taking both vectors (one away from mouse position, and the other towards the center) and finding the vector in-between them
     //This makes its movement quite interesting, making it perhaps not a priority if stalled correctly, but still very scary if ignored
-    towardsPos.add(directionVector(playerPos, this.enemyPos, this.enemyspeed*1.5)); //calculates the vector that goes towards the player
-    awayPos.add(directionVector(mouse, this.enemyPos, this.enemyspeed)); //calculates the vector that goes away from the mark
-    enemyPos.add(directionVector(towardsPos, awayPos, this.enemyspeed)); //calculates both vectors to create oculus pathing.
+    towardsPos.add(directionVector(player.playerPos, this.enemyPos, this.enemySpeed)); //calculates the vector that goes towards the player
+    awayPos.add(directionVector(mouse, this.enemyPos, this.enemySpeed)); //calculates the vector that goes away from the mark
+    enemyPos.add(directionVector(towardsPos.mult(1.1), awayPos, this.enemySpeed)); //calculates both vectors to create oculus pathing.
   }
 }

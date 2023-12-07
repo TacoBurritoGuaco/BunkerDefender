@@ -38,18 +38,17 @@ int tempTimer; //a temporary timer used for anything related to delays
 boolean mouseHasBeenPressed; //boolean to check if the mouse has been previously pressed
 
 PVector centerPos = new PVector(); //vector that determines the center's position
+Player player = new Player();
 
+Grass[] grassList = new Grass[30]; //list of grass (now an object!)
 Husk[] huskList = new Husk[5]; //List of husks
-//Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
+Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-ArrayList<Enemy> allEnemies = new ArrayList<Enemy>();
-for (int i = 0; i < huskList.length; i+=1) {
-  allEnemies.add(huskList[i]);
-}
-//allEnemies.add(ocList);
+Enemy[][] enemyList = { huskList, ocList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+//Found out how to do this from here
 
 //======= Setup! =======//
 void setup() {
@@ -69,6 +68,15 @@ void draw() {
   //SETUP BEFORE GAME
   switch (gameState) {
   case "Reset":
+    
+    //resets the location of the player.
+    player.playerPos.x = 200;
+    player.playerPos.y = 200;
+    key = 'w'; //sets your movement to start by default
+    
+    for (int i = 0; i < grassList.length; i++){
+      grassList[i] = new Grass();
+    }
     score = 0; //score is set to 0 at default
 
     bulletNumber = 3; //default number of bulleta
@@ -81,26 +89,44 @@ void draw() {
     //Sets the center PVector()'s default positoon
     centerPos.x = 200;
     centerPos.y = 200;
-
+  
+    for (int i = 0; i < huskList.length; i++){
+      huskList[i] = new Husk();
+    }
+    for (int i = 0; i < ocList.length; i++){
+      ocList[i] = new Oculus();
+    }
+    
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
     break;
 
     //MAIN GAME
   case "GameStart":
     background(193, 154, 107); //sets the background base color
+    
+    //draws the grass background for the main screen
+    for (int i = 0; i < grassList.length; i++){
+      grassList[i].drawGrass();
+    }
+    
+    player.drawPlayer(); //draws the player character
+    player.movePlayer(key); //moves the player character
 
-    drawBunk(); //draws the titular bunker in the middle of the screen!
-
-    //For loop that draws and moves all the husks
-    for (int i = 0; i < huskList.length; i+=1) {
-      huskList[i].drawHusk();
-      huskList[i].move(centerPos);
+    //For loop within a for loop that draws enemies, moves enemies, and checks if the enemies have reached the player
+    for (int i = 0; i < enemyList.length; i++){
+      for (int j = 0; j < enemyList[i].length; j++){
+        enemyList[i][j].drawEnemy();
+        enemyList[i][j].move();
+        if (enemyList[i][j].enemyReachedPlayer() == true){
+          gameState = "GameOver";
+        }
+      }
     }
     //draws the one fleshy
     //theOneFleshy.drawFleshy();
     //Moves the one fleshy
     //theOneFleshy.move(centerPos);
-
+    
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
 
     mousePressed(); //remove later
@@ -111,19 +137,10 @@ void draw() {
     textSize(35);
     text("score: " + score, 10, 30); //score text that updates with every succesful kill
 
-    //For loop that checks if a husk has reached the bunker
-    for (int i = 0; i < huskList.length; i+=1) {
-      if (huskList[i].enemyReachedBase(centerPos) == true) {
-        gameState = "GameOver";
-      }
-    }
     break;
 
     case ("GameOver"):
     background(0);
-
-    drawBunk(); //draws the titular bunker in the middle of the screen! (Except now you are dead so its not as cool)
-    //Note: This is done on purpose to make the game over screen feel a little more alive
 
     textAlign(CENTER); //sets textAlign to center
     fill(255);
@@ -273,10 +290,9 @@ void mousePressed() {
     if (bulletOut == false) { //if the player is not out of bullets
       if (mouseHasBeenPressed == false) { //if the player has fired a bullet beforehand
 
-        //For loop that checks if a husk was shot and which husk was shot
-        for (int i = 0; i < huskList.length; i+=1) {
-          if (huskList[i].beenShot(mouseX, mouseY) == true) {
-            score += huskList[i].returnPoints(); //update the score if a husk has been succesfully killed
+        for (int i = 0; i < enemyList.length; i++){
+          for (int j = 0; j < enemyList[i].length; j++){
+            enemyList[i][j].beenShot();
           }
         }
         //Check if the one fleshy has been shot

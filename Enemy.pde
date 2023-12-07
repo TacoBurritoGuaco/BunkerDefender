@@ -26,8 +26,7 @@ class Enemy {
 
     //default Position (input value)
     //Change to a public function that returns the player's pVector position
-    enemyPos.x = enemyLoc(randRange, weightChance).x;
-    enemyPos.y = enemyLoc(randRange, weightChance).y;
+    enemyPos = enemyLoc(randRange, weightChance);
     //default speed
     enemySpeed.x = 0.3;
     enemySpeed.y = 0.3;
@@ -53,22 +52,17 @@ class Enemy {
     //if statement that determines if the mouse is within the enemy's hitbox
     if ((mouseX <= (this.enemyPos.x + this.enemyWidth) && mouseX >= (this.enemyPos.x - this.enemyWidth)) && (mouseY <= (this.enemyPos.y + this.enemyLength) && mouseY >= (this.enemyPos.y - this.enemyLength))) {
       //When called, sets this enemy's position to a random position off-screen
-      this.enemyPos.x = enemyLoc(randRange, weightChance).x;
-      this.enemyPos.y = enemyLoc(randRange, weightChance).y;
+      this.enemyPos = enemyLoc(randRange, weightChance);
+      score += points;
       resetEnemy(); //resets this enemy's variables
       return true; //returns true
     }
     return false; //returns false by default
   }
 
-  //returns the enemy's current point value, which is then added to the total score
-  int returnPoints() {
-    return points;
-  }
-
   //returns true or false depending on if the enemy has reached the player's PVector() position
   boolean enemyReachedPlayer() {
-    if ((playerPos.x <= (this.enemyPos.x + this.enemyWidth) && playerPos.x >= (this.enemyPos.x - this.enemyWidth)) && (playerPos.y <= (this.enemyPos.y + this.enemyLength) && playerPos.y >= (this.enemyPos.y - this.enemyLength))) { //is the enemy overlaping the player
+    if ((player.playerPos.x <= (this.enemyPos.x + this.enemyWidth) && player.playerPos.x >= (this.enemyPos.x - this.enemyWidth)) && (player.playerPos.y <= (this.enemyPos.y + this.enemyLength) && player.playerPos.y >= (this.enemyPos.y - this.enemyLength))) { //is the enemy overlaping the player
       return true;
     }
     return false;
