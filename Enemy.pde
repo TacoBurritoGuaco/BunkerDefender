@@ -6,6 +6,8 @@ class Enemy {
   PVector enemyAcc = new PVector(); //vector values used for acceleration x and y
   PVector enemySpeed = new PVector(); //vector values used to store speed x and y
   PVector enemyPos = new PVector(); //the position vector (most important)
+  
+  boolean behavior; //boolean used for enemies that change behaviors when meeting specific conditions
 
   //The length and width of the enemy used in collision code
   int enemyLength;
@@ -51,11 +53,16 @@ class Enemy {
   boolean beenShot() {
     //if statement that determines if the mouse is within the enemy's hitbox
     if ((mouseX <= (this.enemyPos.x + this.enemyWidth) && mouseX >= (this.enemyPos.x - this.enemyWidth)) && (mouseY <= (this.enemyPos.y + this.enemyLength) && mouseY >= (this.enemyPos.y - this.enemyLength))) {
-      //When called, sets this enemy's position to a random position off-screen
-      this.enemyPos = enemyLoc(randRange, weightChance);
-      score += points;
-      resetEnemy(); //resets this enemy's variables
-      return true; //returns true
+      health -= 1; //lowers the enemy's health by 1 on a succesful shot
+      
+      //checks if the enemy has run out of health
+      if (health == 0){
+        //When called, sets this enemy's position to a random position off-screen
+        this.enemyPos = enemyLoc(randRange, weightChance);
+        score += points;
+        resetEnemy(); //resets this enemy's variables
+        return true; //returns true
+      }
     }
     return false; //returns false by default
   }

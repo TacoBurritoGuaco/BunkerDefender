@@ -1,7 +1,7 @@
 /*
-Title: Bunker Defense
+Title: Bunker Defender
  By: Fernando Salas (Student#: 991 721 077)
- Date: Oct 25, 2023
+ Date: Nov 13, 2023
  
  Programming for Game Designers 1: Fundamentals
  Instructor: Nicolas Hesler
@@ -24,6 +24,7 @@ Title: Bunker Defense
 
 //======= Initializing variables  =======//
 int score; //score value
+int gameTime; //timer used for odd time based movement found in enemies like fleshy.
 String gameState; //changes the screen to a different screen
 
 //boolean drawnGrass; //Boolean that checks if the grass has been drawn
@@ -41,13 +42,14 @@ PVector centerPos = new PVector(); //vector that determines the center's positio
 Player player = new Player();
 
 Grass[] grassList = new Grass[30]; //list of grass (now an object!)
-Husk[] huskList = new Husk[5]; //List of husks
-Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
+Husk[] huskList = new Husk[4]; //List of husks
+Oculus[] ocList = new Oculus[3]; //List of Oculus (or is it oculi?)
+Fleshy[] fleList = new Fleshy[2]; //List of fleshys
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-Enemy[][] enemyList = { huskList, ocList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+Enemy[][] enemyList = { huskList, ocList, fleList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
 //Found out how to do this from here
 
 //======= Setup! =======//
@@ -78,8 +80,9 @@ void draw() {
       grassList[i] = new Grass();
     }
     score = 0; //score is set to 0 at default
+    gameTime = 0; //gameTime is reset to 0 by default
 
-    bulletNumber = 3; //default number of bulleta
+    bulletNumber = 6; //default number of bulleta
     bulletReload = 0; //counts up to 1.5 seconds by default
     bulletDelay = 0; //counts up to a quarter of a second of delay by default
     bulletOut = false; //set to false by default
@@ -89,12 +92,18 @@ void draw() {
     //Sets the center PVector()'s default positoon
     centerPos.x = 200;
     centerPos.y = 200;
-  
+    
+    //Initializes the husks in husk list
     for (int i = 0; i < huskList.length; i++){
       huskList[i] = new Husk();
     }
+    //Initializes the Oculuses (or is it oculi?) in oculus list
     for (int i = 0; i < ocList.length; i++){
       ocList[i] = new Oculus();
+    }
+    //Initializes the fleshy's in fleshy list
+    for (int i = 0; i < fleList.length; i++){
+      fleList[i] = new Fleshy();
     }
     
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
@@ -103,6 +112,8 @@ void draw() {
     //MAIN GAME
   case "GameStart":
     background(193, 154, 107); //sets the background base color
+    
+    gameTime += 1; //constantly increases gametime
     
     //draws the grass background for the main screen
     for (int i = 0; i < grassList.length; i++){
@@ -184,11 +195,11 @@ void drawBullets(int bNum) {
 
   //Draws the empty bullet cases behind the actual bullets
   //Increases distance every loop, creating a new bullet on a different location
-  for (int i = 0; i <= 2; i += 1) {
+  for (int i = 0; i <= 5; i += 1) {
     fill(0);
-    triangle(300 + dis, 360, 310 + dis, 340, 320 + dis, 360); //triangle top
-    rect(300 + dis, 360, 20, 30); //rectangle body
-    arc(310 + dis, 390, 20, 10, 0, PI); //ellipse base
+    triangle(220 + dis, 360, 230 + dis, 340, 240 + dis, 360); //triangle top
+    rect(220 + dis, 360, 20, 30); //rectangle body
+    arc(230 + dis, 390, 20, 10, 0, PI); //ellipse base
     dis += 30;
   }
 
@@ -198,20 +209,20 @@ void drawBullets(int bNum) {
   //Does the same as the previous for loop, but with more detailed colors/additional shapes
   for (int i = 1; i <= bNum; i += 1) {
     fill(129, 133, 137);
-    triangle(300 + dis, 360, 310 + dis, 340, 320 + dis, 360); //triangle top
+    triangle(220 + dis, 360, 230 + dis, 340, 240 + dis, 360); //triangle top
 
     fill(253, 218, 13); //yellow bullet body and bottom
-    rect(300 + dis, 360, 20, 30); //rectangle body
-    arc(310 + dis, 390, 20, 10, 0, PI); //ellipse base
+    rect(220 + dis, 360, 20, 30); //rectangle body
+    arc(230 + dis, 390, 20, 10, 0, PI); //ellipse base
 
     noFill();
     stroke(196, 30, 58); //red stripe on bullet body
-    arc(310 + dis, 375, 17, 5, 0, PI); //arc that draws the stripe
+    arc(230 + dis, 375, 17, 5, 0, PI); //arc that draws the stripe
     noStroke(); //resets to no stroke
 
     //additional triangle to give the bullet shape more weight.
     fill(129, 133, 137);
-    triangle(300 + dis, 360, 310 + dis, 365, 320 + dis, 360);
+    triangle(220 + dis, 360, 230 + dis, 365, 240 + dis, 360);
 
     dis += 30;
   }
@@ -322,7 +333,7 @@ void mousePressed() {
     bulletReload += 1;
     if (bulletReload >= 90) {
       bulletOut = false;
-      bulletNumber = 3; //resets the number of bullets after reload delay
+      bulletNumber = 6; //resets the number of bullets after reload delay
       bulletReload = 0; //resets bullet delay
     }
   }
