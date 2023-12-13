@@ -158,14 +158,39 @@ void draw() {
 
     case ("GameOver"):
     background(0);
+    
+    //Box for background
+    fill(120, 87, 51);
+    rect(110, 30, 180, 120);
+    
+    //Bolts on the big square
+    fill(170);
+    circle(115, 35, 5);
+    circle(285, 35, 5);
+    circle(115, 145, 5);
+    circle(285, 145, 5);
+     
+    drawDead(); //draws the dead bunker (he dead as hell)
+    
+    //Light beam!
+    fill(253, 218, 13, 100);
+    ellipse(200, 290, 120, 60); //circle at base
+    quad(140, 280, 190, 150, 210, 150, 260, 280); //beam quadrilateral
+    //Taken partly from goop lab and changed accordingly
 
+    //Drawing the text
     textAlign(CENTER); //sets textAlign to center
     fill(255);
-    textSize(40);
-    text("Final score: " + score, 200, 100); //The final score, displayed in the middle of the screen
+    textSize(60);
+    text("GAME", 200, 80);
+    text("OVER", 200, 140);
+    textSize(20);
+    //The final score, displayed in the middle of the screen
+    text("Final score:", 200, 180);
+    text(score, 200, 200); 
     textAlign(CORNER); //resets textAlign back to default
 
-    drawButton(200, 300, 80, 80); //draws the button that resets the game using the draw button function (simplified from goopLab)
+    drawButton(200, 360, 90, 40); //draws the button that resets the game using the draw button function (simplified from goopLab)
     break;
   }
 }
@@ -234,6 +259,40 @@ void drawBullets(int bNum) {
   }
 }
 
+//Draws the dead defender (he has died)
+void drawDead(){
+
+  //BODY SEGMENTS
+  fill(#3B3B3B);
+  quad(205, 295, 220, 275, 235, 275, 215, 305); //bottom right arm
+  circle(210, 300, 15); //bottom right arm circle
+  
+  //Rectangle
+  rect(180, 260, 50, 20); //body
+  rect(160, 260, 20, 10); //left upper leg
+  circle(160, 265, 10); //foot circle
+  
+  fill(#525252);
+  rect(180, 270, 10, 30);//left bottom leg
+  circle(185, 300, 10); //foot circle
+  
+  rect(215, 250, 10, 30);//right top arm
+  circle(220, 280, 10); //circle
+  
+  //HEAD SEGMENTS
+  fill(128);
+  quad(230, 240, 255, 260, 255, 280, 230, 300); //bunker head
+  //flag
+  fill(240, 20, 20);
+  rect(260, 270, 10, 20);
+  //draws the stick
+  strokeWeight(5);
+  stroke(#3B3B3B);
+  line(255, 270, 275, 270);
+  noStroke(); //resets back to no stroke
+  
+}
+
 //Thank the lord for reusable code, halleluyah
 //===================BUTTON FUNCTION====================//
 //"Draw button" function originally from train function example
@@ -265,8 +324,17 @@ void drawButton(int coordX, int coordY, int buttonWidth, int buttonHeight) {
     fill(210, 43, 43);
   }
 
-  //draw the button shape (ellipse)
-  ellipse(coordX, coordY, buttonWidth, buttonHeight);
+  //draw the button shape (rectangle)
+  rectMode(CENTER); //Rectmode Center for button and text
+  rect(coordX, coordY, buttonWidth, buttonHeight); //button
+  textAlign(CENTER); //sets textAlign to center
+  fill(255); //white text
+  textSize(18); //size
+  text("Continue?", coordX, coordY + 5); //continue text
+  
+  //reset modes back to default
+  rectMode(CORNER);
+  textAlign(CORNER);
   noStroke();
 }
 
