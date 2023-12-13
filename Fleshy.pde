@@ -1,7 +1,7 @@
 
 //Fleshy's are the strongest, yet most infrequent enemy
-//They can take 3 bullet shots, and while the move slow, their acceleration is very high, only remedied by their method of movement
-//Rather than move diagonally, fleshy's move horizontally and vertically.
+//They can take 2 bullet shots, and while the move slow, their acceleration is very high, only remedied by their method of movement
+//Rather than move diagonally, fleshy's move horizontally and vertically, alternating between the two based on the current gameTime.
 class Fleshy extends Enemy {
 
   //Initializes the fleshy

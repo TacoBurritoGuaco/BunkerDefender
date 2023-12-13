@@ -45,11 +45,12 @@ Grass[] grassList = new Grass[30]; //list of grass (now an object!)
 Husk[] huskList = new Husk[4]; //List of husks
 Oculus[] ocList = new Oculus[3]; //List of Oculus (or is it oculi?)
 Fleshy[] fleList = new Fleshy[2]; //List of fleshys
+Splitter[] splitList = new Splitter[1]; //list of splitters
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-Enemy[][] enemyList = { huskList, ocList, fleList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+Enemy[][] enemyList = { huskList, ocList, fleList, splitList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
 //Found out how to do this from here
 
 //======= Setup! =======//
@@ -101,9 +102,13 @@ void draw() {
     for (int i = 0; i < ocList.length; i++){
       ocList[i] = new Oculus();
     }
-    //Initializes the fleshy's in fleshy list
+    //Initializes the fleshys in fleshy list
     for (int i = 0; i < fleList.length; i++){
       fleList[i] = new Fleshy();
+    }
+    //Initializes the Splitters in splitter list
+    for (int i = 0; i < splitList.length; i++){
+      splitList[i] = new Splitter();
     }
     
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
