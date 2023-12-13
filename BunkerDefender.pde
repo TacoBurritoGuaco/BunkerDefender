@@ -127,6 +127,7 @@ void draw() {
     
     player.drawPlayer(); //draws the player character
     player.movePlayer(key); //moves the player character
+    player.playerBoundary(); //constrains the player into the screen
 
     //For loop within a for loop that draws enemies, moves enemies, and checks if the enemies have reached the player
     for (int i = 0; i < enemyList.length; i++){
