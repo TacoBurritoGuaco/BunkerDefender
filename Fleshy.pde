@@ -17,8 +17,8 @@ class Fleshy extends Enemy {
     enemySpeed.y = 0.001;
     
     //Sets the fleshy's acceleration
-    enemyAcc.x = 0.005;
-    enemyAcc.y = 0.005;
+    enemyAcc.x = 0.07;
+    enemyAcc.y = 0.07;
 
     //sets the enemy's location
     enemyPos = enemyLoc(randRange, weightChance);
@@ -60,10 +60,12 @@ class Fleshy extends Enemy {
   }
 
   //Moves the fleshy (This is the part where I die)
+  //Fleshy moves in an alternating grid like pattern, where he either moves only on the x-axis, or only on the y-axis
+  //this alternating pattern changes based on the main game's timer, (specifically, whenever this timer is divisible by 30)
   @Override void move() {
     
     //checks if gameTime is divisible by 180
-    if (gameTime % 60 == 0){
+    if (gameTime % 30 == 0){
       
       //if else statement that switches between the two different behavior modes for the fleshy
       if (behavior == false){
@@ -75,13 +77,16 @@ class Fleshy extends Enemy {
     
     //Movement changes depending on behavior between two different movement posibilities.
     //In fleshy's case, it either moves only vertically, or moves only horizontally
-    if (behavior == false){
-      enemySpeed.add(enemyAcc.x, 0);
-      enemyPos.add(directionVector(player.playerPos, this.enemyPos, this.enemySpeed).x, 0);
+    if (behavior == false){ //Horizontal Movement
+      enemySpeed.y = 0; //resets fleshy's vertical speed back to 0
+      enemySpeed.add(enemyAcc.x, 0); //fleshy accelerates on the x axis and resets 
+      enemyPos.add(directionVector(player.playerPos, this.enemyPos, this.enemySpeed).x, 0); //sets the vertical speed of fleshy to 0, and moves towards the player on the x axis
+      //print(enemyPos);
     }
-    if (behavior == true){
+    if (behavior == true){ //Vertical movement
+      enemySpeed.x = 0; //resets fleshy's horizontal speed back to 0
       enemySpeed.add(0, enemyAcc.y);
-      enemyPos.add(0, directionVector(player.playerPos, this.enemyPos, this.enemySpeed).y);
+      enemyPos.add(0, directionVector(player.playerPos, this.enemyPos, this.enemySpeed).y); //sets the Horizontal speed of fleshy to 0, and moves towards the player on the y axis
     }
     
   }
