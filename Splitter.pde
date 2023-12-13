@@ -26,8 +26,9 @@ class Splitter extends Enemy {
     enemyPos = enemyLoc(randRange, weightChance);
 
     //sets to default enemy length and width
-    enemyLength = 40;
-    enemyWidth = 40;
+    enemyLength = 20;
+    enemyWidth = 20;
+    //This is purposefully smaller than the splitter to allow for some window for error when it activates
     
     behavior = false; //sets behavior boolean
     splitTimer = 0; //timer for spawning

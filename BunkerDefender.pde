@@ -44,7 +44,7 @@ Player player = new Player();
 Grass[] grassList = new Grass[30]; //list of grass (now an object!)
 Husk[] huskList = new Husk[4]; //List of husks
 Oculus[] ocList = new Oculus[3]; //List of Oculus (or is it oculi?)
-Fleshy[] fleList = new Fleshy[2]; //List of fleshys
+Fleshy[] fleList = new Fleshy[1]; //List of fleshys
 Splitter[] splitList = new Splitter[1]; //list of splitters
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
