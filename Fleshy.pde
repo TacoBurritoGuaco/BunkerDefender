@@ -8,7 +8,7 @@ class Fleshy extends Enemy {
   Fleshy() {
     super();
     health = 3; //sets the fleshy's health to 2
-    randRange = 200; //the default range added/substracted from the random values in the "beenShot" function
+    randRange = 400; //the default range added/substracted from the random values in the "beenShot" function
     points = int(random(0 + randRange, 10 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
     weightChance = 6; //the default weight of the enemy spawns
 
@@ -24,8 +24,8 @@ class Fleshy extends Enemy {
     enemyPos = enemyLoc(randRange, weightChance);
 
     //sets to default enemy length and width
-    enemyLength = 40;
-    enemyWidth = 40;
+    enemyLength = 25;
+    enemyWidth = 25;
     
     behavior = false; //sets behavior boolean
   }

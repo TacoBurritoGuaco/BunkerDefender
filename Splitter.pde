@@ -91,9 +91,9 @@ class Splitter extends Enemy {
     enemyTimer += 1;
     //Timer waits for roughly 7 seconds before moving the enemy onto the screen
     if (enemyTimer == 420) {
-      float posListX[] = {random(player.playerPos.x - 60, player.playerPos.x - 70), random(player.playerPos.x + 50, player.playerPos.x + 70)}; //List of two randomized values that are in a range off of the player's x coordinates
+      float posListX[] = {random(player.playerPos.x - 60, player.playerPos.x - 70), random(player.playerPos.x + 60, player.playerPos.x + 70)}; //List of two randomized values that are in a range off of the player's x coordinates
       enemyPos.x = posListX[int(random(0, 2))]; //teleports the splitter somewhere on screen near the player
-      float posListY[] = {random(player.playerPos.y - 60, player.playerPos.y - 70), random(player.playerPos.y + 50, player.playerPos.y + 70)}; //List of two randomized values that are in a range off of the player's y coordinates
+      float posListY[] = {random(player.playerPos.y - 60, player.playerPos.y - 70), random(player.playerPos.y + 60, player.playerPos.y + 70)}; //List of two randomized values that are in a range off of the player's y coordinates
       enemyPos.y = posListY[int(random(0, 2))]; //teleports the splitter somewhere on screen near the player
     }
     //The randomizing is done this way to both prevent the enemy from telefragging the player and to make them spawn somewhere near the player's position

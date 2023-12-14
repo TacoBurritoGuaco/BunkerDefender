@@ -44,16 +44,19 @@ boolean mouseHasBeenPressed; //boolean to check if the mouse has been previously
 PVector centerPos = new PVector(); //vector that determines the center's position
 Player player = new Player();
 
+ArrayList<Projectile> projList = new ArrayList<Projectile>(); //list of projectiles that get added by enemies that shoot at the player.
+
 Grass[] grassList = new Grass[30]; //list of grass (now an object!)
 Husk[] huskList = new Husk[4]; //List of husks
-Oculus[] ocList = new Oculus[3]; //List of Oculus (or is it oculi?)
+Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
 Fleshy[] fleList = new Fleshy[1]; //List of fleshys
 Splitter[] splitList = new Splitter[1]; //list of splitters
+Musculus[] musList = new Musculus[2]; //list of Musculus
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-Enemy[][] enemyList = { huskList, ocList, fleList, splitList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+Enemy[][] enemyList = { huskList, ocList, fleList, splitList, musList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
 //Found out how to do this from here
 
 //======= Setup! =======//
@@ -114,6 +117,13 @@ void draw() {
     for (int i = 0; i < splitList.length; i++){
       splitList[i] = new Splitter();
     }
+    //Initializes the Musculuses (Or Musculi I guess) in musculus list
+    for (int i = 0; i < musList.length; i++){
+      musList[i] = new Musculus();
+    }
+    
+    //Resets the projectile list on reset.
+    projList = new ArrayList<Projectile>();
     
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
     break;
@@ -145,6 +155,21 @@ void draw() {
         }
       }
     }
+    
+    //for every projectile in projectile list
+    for (int i = 0; i < projList.size(); i++){
+      projList.get(i).drawProjectile();
+      projList.get(i).move();
+      if (projList.get(i).projReachedPlayer() == true){
+        gameState = "GameOver";
+      }
+      //Removes the projectiles from the projectile list when they go off-screem
+      if ((projList.get(i).projPos.x >= width + 10) || (projList.get(i).projPos.y >= height + 10) || (projList.get(i).projPos.x <= 0 - 10) || (projList.get(i).projPos.y <= 0 - 10)){
+        projList.remove(i); //COME BACK TO THIS IN A BIT
+      }
+    }
+    //Print command used to verify whether or not this worked.
+    //print(projList);
     
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
 

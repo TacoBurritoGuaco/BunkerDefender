@@ -83,4 +83,8 @@ class Enemy {
   //empty movement option that is overriden
   void move() {
   }
+  
+  //Empty projectile shooting function that is overriden by projectile shooting enemies.
+  void shootProjectile(){
+  }
 }
