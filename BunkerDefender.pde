@@ -175,7 +175,7 @@ void draw() {
       }
     }
     //Print command used to verify whether or not this worked.
-    print(projList);
+    //print(projList);
     
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
 
