@@ -74,4 +74,11 @@ public class Player {
       break;
     }
   }
+  
+  //Function that creates a constraint for the player so that they do not go off screen
+  //Credit to Kevin for the help understanding this!
+  void playerBoundary(){
+    playerPos.x = constrain(playerPos.x, 10, width); //constrain for the x coordinate
+    playerPos.y = constrain(playerPos.y, 10, height); //constrain for the y coordinate
+  }
 }
