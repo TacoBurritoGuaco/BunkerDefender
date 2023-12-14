@@ -174,8 +174,8 @@ void draw() {
     
     //Light beam!
     fill(253, 218, 13, 100);
-    ellipse(200, 290, 120, 60); //circle at base
-    quad(140, 280, 190, 150, 210, 150, 260, 280); //beam quadrilateral
+    arc(200, 290, 120, 60, 0, PI); //circle at base
+    quad(140, 290, 190, 150, 210, 150, 260, 290); //beam quadrilateral
     //Taken partly from goop lab and changed accordingly
 
     //Drawing the text
@@ -203,9 +203,17 @@ void updateScore(int enemyScore) {
 
 //======= Sniper Mark Function =======//
 void drawMark() {
-
-  //Draws the circle
+  
+  //line over the mark
   noFill();
+  strokeWeight(5);
+  stroke(255, 20, 20, 100);
+  line(mouseX, mouseY, player.playerPos.x, player.playerPos.y -8);
+  //Instead of having a circled line, I decided to stick with a transparent line
+  //Not only is it less difficult and resource incentive, but also resembles a laser pointer!
+  //Like a sniper rifle! kinda neat!
+  
+  //Draws the circle
   stroke(255, 20, 20);
   strokeWeight(5);
   circle(mouseX, mouseY, 60);
