@@ -8,19 +8,21 @@ Title: Bunker Defender
  
  Description:
  - Use the mouse to aim down your sniper sight and press it to destroy the incoming horde of monsters!
- - Beware of the husks and their large numbers! they get faster the closer they are!
- - Beware of the Oculus and its sights, which avoid your own!
- - Be careful though! you only have 3 bullets! if you run out of bullets, you'll have to wait before you can shoot any of the monsters again
+ - Move about using the WASD keys. Press any other key to stop!
+ - Beware of the husks and their large numbers! they get faster the closer they are! (1 Shot)
+ - Beware of the Oculus and its sights, which avoid your own! (1 Shot)
+ - Beware of the Musculus, a nasty mutated rat that shoots projectiles towards you! its stronger than it looks! (2 Shots)
+ - Beware of the Gravish, a spooky radish ghoul that charges up a powerful barrage of mutant projectiles! (2 shots)
+ - Beware of the Fleshy, which although can only move cardinally, has bulk and speed to make up for it! (3 shots)
+ - Beware of the Splitter, a ghastly ghoul that's hard to take down! It might seem docile, but take it down before it gets angry! (3 shots)
+ - Be careful though! you only have 6 bullets! if you run out of bullets, you'll have to wait before you can shoot any of the monsters again
  - Every time you kill a monster, you gain points!
- - If the monsters reach your bunker, you lose! but don't fret, you can always try again by pressing the big red button you'll see afterwards
+ - If the monsters reach you, you lose! but don't fret, you can always try again by pressing the "continue" button!
  - The screen you get after your untimely demise will tell you your score! try and see how much higher you can make it!
  */
 
-//Note: I wasn't able to implement a few things, as you will see through my delirious 8-hours of constant coding comments
-//Still, I think the final product is quite nice! its not quite what I wished it could have been, but I am still quite proud of what I accomplished
-//(It also meets all the requirements so there's that)
-//Once again, I hope you enjoy it!
-
+//Note: Some things have changed, but everything big in the planner is right here!
+//Hope you enjoy it!
 
 //======= Initializing variables  =======//
 int score; //score value
@@ -41,16 +43,20 @@ boolean mouseHasBeenPressed; //boolean to check if the mouse has been previously
 PVector centerPos = new PVector(); //vector that determines the center's position
 Player player = new Player();
 
+ArrayList<Projectile> projList = new ArrayList<Projectile>(); //list of projectiles that get added by enemies that shoot at the player.
+
 Grass[] grassList = new Grass[30]; //list of grass (now an object!)
 Husk[] huskList = new Husk[4]; //List of husks
-Oculus[] ocList = new Oculus[3]; //List of Oculus (or is it oculi?)
+Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
 Fleshy[] fleList = new Fleshy[1]; //List of fleshys
 Splitter[] splitList = new Splitter[1]; //list of splitters
+Musculus[] musList = new Musculus[2]; //list of Musculus
+Gravish[] gravList = new Gravish[2]; //list of Gravish
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-Enemy[][] enemyList = { huskList, ocList, fleList, splitList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+Enemy[][] enemyList = { huskList, ocList, fleList, splitList, musList, gravList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
 //Found out how to do this from here
 
 //======= Setup! =======//
@@ -70,6 +76,7 @@ void draw() {
 
   //SETUP BEFORE GAME
   switch (gameState) {
+  //=========RESET SCREEN===========//
   case "Reset":
     
     //resets the location of the player.
@@ -110,11 +117,22 @@ void draw() {
     for (int i = 0; i < splitList.length; i++){
       splitList[i] = new Splitter();
     }
+    //Initializes the Musculuses (Or Musculi I guess) in musculus list
+    for (int i = 0; i < musList.length; i++){
+      musList[i] = new Musculus();
+    }
+    //Initializes the Gravishes in gravish list
+    for (int i = 0; i < gravList.length; i++){
+      gravList[i] = new Gravish();
+    }
+    
+    //Resets the projectile list on reset.
+    projList = new ArrayList<Projectile>();
     
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
     break;
 
-    //MAIN GAME
+  //=========MAIN GAME===========//
   case "GameStart":
     background(193, 154, 107); //sets the background base color
     
@@ -128,6 +146,8 @@ void draw() {
     player.drawPlayer(); //draws the player character
     player.movePlayer(key); //moves the player character
     player.playerBoundary(); //constrains the player into the screen
+    
+    mousePressed(); //calls mouse pressed for shooting bullets, which is done before enemies move to prevent them from killing the player despite succesful shots
 
     //For loop within a for loop that draws enemies, moves enemies, and checks if the enemies have reached the player
     for (int i = 0; i < enemyList.length; i++){
@@ -139,14 +159,25 @@ void draw() {
         }
       }
     }
-    //draws the one fleshy
-    //theOneFleshy.drawFleshy();
-    //Moves the one fleshy
-    //theOneFleshy.move(centerPos);
+    
+    //for every projectile in projectile list
+    //This one is a backwards for loop! Its there because this way I can clear up every projectile from the projectile list without issue
+    //I learned this from Assignment 4 (version control assignment)
+    for (int i = (projList.size() - 1); i >= 0; i--){
+      projList.get(i).drawProjectile();
+      projList.get(i).move();
+      if (projList.get(i).projReachedPlayer() == true){
+        gameState = "GameOver";
+      }
+      //Removes the projectiles from the projectile list when they go off-screem
+      if ((projList.get(i).projPos.x >= width + 10) || (projList.get(i).projPos.y >= height + 10) || (projList.get(i).projPos.x <= 0 - 10) || (projList.get(i).projPos.y <= 0 - 10)){
+        projList.remove(i); //COME BACK TO THIS IN A BIT
+      }
+    }
+    //Print command used to verify whether or not this worked.
+    print(projList);
     
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
-
-    mousePressed(); //remove later
 
     drawBullets(bulletNumber); //draws the bullet ui
 
@@ -155,8 +186,8 @@ void draw() {
     text("score: " + score, 10, 30); //score text that updates with every succesful kill
 
     break;
-
-    case ("GameOver"):
+  //=========GAME OVER SCREEN===========//
+  case ("GameOver"):
     background(0);
     
     //Box for background

@@ -15,6 +15,7 @@ class Enemy {
 
   int points; //The points the enemy will give
   int health; //The health the enemy has
+  int enemyTimer; //timer used by certain enemies to determine their behavior
   float randRange; //value that determines the range of the random values being inputted
   float weightChance; //value that weights the chance for the enemy to spawn either from the sides or from the top
 
@@ -30,8 +31,8 @@ class Enemy {
     //Change to a public function that returns the player's pVector position
     enemyPos = enemyLoc(randRange, weightChance);
     //default speed
-    enemySpeed.x = 0.3;
-    enemySpeed.y = 0.3;
+    enemySpeed.x = 0.2;
+    enemySpeed.y = 0.2;
     //default acceleration
     enemyAcc.x = 0.001;
     enemyAcc.y = 0.001;
@@ -43,8 +44,8 @@ class Enemy {
 
   void resetEnemy() {
     //resets to default speed
-    enemySpeed.x = 0.3;
-    enemySpeed.y = 0.3;
+    enemySpeed.x = 0.2;
+    enemySpeed.y = 0.2;
     points = int(random(0 + randRange, 5 + randRange)); //Resets how many points the enemy gives
     health = 1; //resets the enemy's health
   }
@@ -81,5 +82,9 @@ class Enemy {
 
   //empty movement option that is overriden
   void move() {
+  }
+  
+  //Empty projectile shooting function that is overriden by projectile shooting enemies.
+  void shootProjectile(){
   }
 }

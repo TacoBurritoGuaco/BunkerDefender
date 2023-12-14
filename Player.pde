@@ -43,34 +43,37 @@ public class Player {
     //animated using framecount the same way it was done with froggyfly
   }
 
+  //functiom that moves the player using a switch statement
+  //If a key is pressed that is not in the switch list, the player stops
+  //This is left in to allow the player to have more freedom of movement
   void movePlayer(char theKey) {
     switch(theKey) {
       case('w'):
-      this.playerPos.y -= 1;
+      this.playerPos.y -= 1.2;
       break;
       case('W'):
-      this.playerPos.y -= 1;
+      this.playerPos.y -= 1.2;
       break;
 
       case('s'):
-      this.playerPos.y += 1;
+      this.playerPos.y += 1.2;
       break;
       case('S'):
-      this.playerPos.y += 1;
+      this.playerPos.y += 1.2;
       break;
 
       case('a'):
-      this.playerPos.x -= 1;
+      this.playerPos.x -= 1.2;
       break;
       case('A'):
-      this.playerPos.x -= 1;
+      this.playerPos.x -= 1.2;
       break;
 
       case('d'):
-      this.playerPos.x += 1;
+      this.playerPos.x += 1.2;
       break;
       case('D'):
-      this.playerPos.x += 1;
+      this.playerPos.x += 1.2;
       break;
     }
   }

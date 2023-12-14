@@ -12,8 +12,8 @@ class Oculus extends Enemy {
     weightChance = 2; //the default weight of the enemy spawns
 
     //Sets the oculus' speed
-    enemySpeed.x = 0.5;
-    enemySpeed.y = 0.5;
+    enemySpeed.x = 0.6;
+    enemySpeed.y = 0.6;
 
     //sets the enemy's location
     enemyPos = enemyLoc(randRange, weightChance);
@@ -24,8 +24,8 @@ class Oculus extends Enemy {
   }
 
   @Override void resetEnemy() {
-    enemySpeed.x = 0.5;
-    enemySpeed.y = 0.5;
+    enemySpeed.x = 0.6;
+    enemySpeed.y = 0.6;
     points = int(random(0 + randRange, 10 + randRange)); //Resets how many points the enemy gives
     health = 1; //resets the enemy's health
   }
@@ -33,16 +33,21 @@ class Oculus extends Enemy {
   //Draws the oculus
   @Override void drawEnemy() {
 
-    fill(136, 8, 8); //blood red
-    quad(enemyPos.x - 15, enemyPos.y, enemyPos.x, enemyPos.y - 25, enemyPos.x + 15, enemyPos.y, enemyPos.x, enemyPos.y + 25); //diamond drawn behind the eye of the oculus
+    fill(156, 8, 8);; //blood red
+    quad(enemyPos.x - 10, enemyPos.y - 20, enemyPos.x + 10, enemyPos.y - 25, enemyPos.x + 15, enemyPos.y, enemyPos.x - 15, enemyPos.y); //Top trapezoid
+    quad(enemyPos.x - 10, enemyPos.y + 15, enemyPos.x + 10, enemyPos.y + 10, enemyPos.x + 15, enemyPos.y, enemyPos.x - 15, enemyPos.y); //bottom trapezoid
 
-    fill(245); //greyish white for the eye
-
-    circle(enemyPos.x, enemyPos.y, 30); //eye
+    fill(245); //greyish white for the eyes
+    circle(enemyPos.x - 8, enemyPos.y - 5, 25); //first eye
+    circle(enemyPos.x + 15, enemyPos.y - 12, 20); //second eye
+    circle(enemyPos.x + 10, enemyPos.y + 7, 15); //third eye
 
     fill(0);
-    circle((mouseX/20)+(enemyPos.x - 9), (mouseY/20)+(enemyPos.y - 9), 5); //pupil
-    //The pupil works the same way as the froggyFly pupils.
+    circle((player.playerPos.x/30)+(enemyPos.x - 18), (player.playerPos.y/30)+(enemyPos.y - 10), 5); // first pupil (looks towards the player instead of the mouse)
+    circle((mouseX/50)+(enemyPos.x + 12), (mouseY/50)+(enemyPos.y - 15), 10); // second pupil (looks towards the mouse)
+    circle((mouseX/55)+(enemyPos.x + 7), (mouseY/55)+(enemyPos.y + 5), 5); // third pupil (looks towards the mouse)
+    
+    //The pupils works the same way as the froggyFly pupils.
   }
 
   //Moves the Oculus
