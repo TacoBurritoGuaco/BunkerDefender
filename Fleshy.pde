@@ -1,13 +1,13 @@
 
 //Fleshy's are the strongest, yet most infrequent enemy
-//They can take 2 bullet shots, and while the move slow, their acceleration is very high, only remedied by their method of movement
+//They can take 3 bullet shots, and while the move slow, their acceleration is very high, only remedied by their method of movement
 //Rather than move diagonally, fleshy's move horizontally and vertically, alternating between the two based on the current gameTime.
 class Fleshy extends Enemy {
 
   //Initializes the fleshy
   Fleshy() {
     super();
-    health = 2; //sets the fleshy's health to 2
+    health = 3; //sets the fleshy's health to 2
     randRange = 200; //the default range added/substracted from the random values in the "beenShot" function
     points = int(random(0 + randRange, 10 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
     weightChance = 6; //the default weight of the enemy spawns
@@ -35,25 +35,30 @@ class Fleshy extends Enemy {
     enemySpeed.x = 0.001;
     enemySpeed.y = 0.001;
     points = int(random(0 + randRange, 5 + randRange)); //Resets how many points the enemy gives
-    health = 2; //resets the enemy's health
+    health = 3; //resets the enemy's health
   }
 
   //Draws the fleshy
   @Override void drawEnemy() {
     rectMode(CENTER);//Sets to center to more easily determine where fleshy should be drawn
 
-    fill(136, 8, 8); //blood red
+    fill(156, 8, 8); //blood red
     rect(enemyPos.x, enemyPos.y, 40, 40); //body
 
     //side triangles
+    fill(79, 121, 66);
+    triangle(enemyPos.x - 20, enemyPos.y - 20, enemyPos.x - 15, enemyPos.y - 20, enemyPos.x - 20, enemyPos.y - 15);
+    triangle(enemyPos.x + 20, enemyPos.y - 20, enemyPos.x + 15, enemyPos.y - 20, enemyPos.x + 20, enemyPos.y - 15);
+    triangle(enemyPos.x - 20, enemyPos.y + 20, enemyPos.x - 15, enemyPos.y + 20, enemyPos.x - 20, enemyPos.y + 15);
+    triangle(enemyPos.x + 20, enemyPos.y + 20, enemyPos.x + 15, enemyPos.y + 20, enemyPos.x + 20, enemyPos.y + 15);
 
     //mouth
     fill(0);
-    rect(enemyPos.x, enemyPos.y, 20, 20); //mouth (with no teeth)
+    quad(enemyPos.x - 5, enemyPos.y - 10, enemyPos.x + 5, enemyPos.y - 10, enemyPos.x + 15, enemyPos.y + 10, enemyPos.x - 15, enemyPos.y + 10); //mouth (with no teeth)
 
     fill(255); //pearly whites!
-    rect(enemyPos.x, enemyPos.y + random(8, 10), 20, 5); //bottom teeth
-    rect(enemyPos.x, enemyPos.y - random(8, 10), 20, 5); //upper teeth
+    rect(enemyPos.x, enemyPos.y + random(8, 10), 25, 5); //bottom teeth
+    rect(enemyPos.x, enemyPos.y - random(8, 10), 10, 5); //upper teeth
     //Note: these teeth clatter just like the ones in goopLab (using random)
 
     rectMode(CORNER);//resets back to default corner
@@ -65,7 +70,7 @@ class Fleshy extends Enemy {
   @Override void move() {
     
     //checks if gameTime is divisible by 180
-    if (gameTime % 30 == 0){
+    if (gameTime % 40 == 0){
       
       //if else statement that switches between the two different behavior modes for the fleshy
       if (behavior == false){

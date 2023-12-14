@@ -15,6 +15,7 @@ class Enemy {
 
   int points; //The points the enemy will give
   int health; //The health the enemy has
+  int enemyTimer; //timer used by certain enemies to determine their behavior
   float randRange; //value that determines the range of the random values being inputted
   float weightChance; //value that weights the chance for the enemy to spawn either from the sides or from the top
 

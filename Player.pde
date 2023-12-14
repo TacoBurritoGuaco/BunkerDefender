@@ -43,6 +43,9 @@ public class Player {
     //animated using framecount the same way it was done with froggyfly
   }
 
+  //functiom that moves the player using a switch statement
+  //If a key is pressed that is not in the switch list, the player stops
+  //This is left in to allow the player to have more freedom of movement
   void movePlayer(char theKey) {
     switch(theKey) {
       case('w'):

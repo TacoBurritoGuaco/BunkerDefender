@@ -8,19 +8,22 @@ Title: Bunker Defender
  
  Description:
  - Use the mouse to aim down your sniper sight and press it to destroy the incoming horde of monsters!
+ - Move about using the WASD keys. Press any other key to stop!
  - Beware of the husks and their large numbers! they get faster the closer they are!
  - Beware of the Oculus and its sights, which avoid your own!
- - Be careful though! you only have 3 bullets! if you run out of bullets, you'll have to wait before you can shoot any of the monsters again
+ - Beware of the Fleshy, which although can only move cardinally, has bulk and speed to make up for it!
+ - Beware of the Splitter, a ghastly ghoul that's hard to take down! It might seem docile, but take it down before it gets angry!
+ - Be careful though! you only have 6 bullets! if you run out of bullets, you'll have to wait before you can shoot any of the monsters again
  - Every time you kill a monster, you gain points!
- - If the monsters reach your bunker, you lose! but don't fret, you can always try again by pressing the big red button you'll see afterwards
+ - If the monsters reach you, you lose! but don't fret, you can always try again by pressing the "continue" button!
  - The screen you get after your untimely demise will tell you your score! try and see how much higher you can make it!
  */
 
-//Note: I wasn't able to implement a few things, as you will see through my delirious 8-hours of constant coding comments
-//Still, I think the final product is quite nice! its not quite what I wished it could have been, but I am still quite proud of what I accomplished
-//(It also meets all the requirements so there's that)
-//Once again, I hope you enjoy it!
-
+//Note: I wasn't able to implement a few things, both from exhaustion and from a wish to keep the game generally well-balanced
+//This comes in the form of all the projectile enemies, which as you should be able to very quickly see, are missing
+//However, beyond that, the game is in a comfortably complete state. I meet the grand majority of the necessary skill inventories, and managed to expand
+//Upon the original bunker defense object oriented toy greatly
+//I hope you do enjoy it! It was quite fun despite the stress of this semester
 
 //======= Initializing variables  =======//
 int score; //score value
@@ -70,6 +73,7 @@ void draw() {
 
   //SETUP BEFORE GAME
   switch (gameState) {
+  //=========RESET SCREEN===========//
   case "Reset":
     
     //resets the location of the player.
@@ -114,7 +118,7 @@ void draw() {
     gameState = "GameStart"; //sets the screen to game start, and therefore, starts the game!
     break;
 
-    //MAIN GAME
+  //=========MAIN GAME===========//
   case "GameStart":
     background(193, 154, 107); //sets the background base color
     
@@ -128,6 +132,8 @@ void draw() {
     player.drawPlayer(); //draws the player character
     player.movePlayer(key); //moves the player character
     player.playerBoundary(); //constrains the player into the screen
+    
+    mousePressed(); //calls mouse pressed for shooting bullets, which is done before enemies move to prevent them from killing the player despite succesful shots
 
     //For loop within a for loop that draws enemies, moves enemies, and checks if the enemies have reached the player
     for (int i = 0; i < enemyList.length; i++){
@@ -139,14 +145,8 @@ void draw() {
         }
       }
     }
-    //draws the one fleshy
-    //theOneFleshy.drawFleshy();
-    //Moves the one fleshy
-    //theOneFleshy.move(centerPos);
     
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
-
-    mousePressed(); //remove later
 
     drawBullets(bulletNumber); //draws the bullet ui
 
@@ -155,8 +155,8 @@ void draw() {
     text("score: " + score, 10, 30); //score text that updates with every succesful kill
 
     break;
-
-    case ("GameOver"):
+  //=========GAME OVER SCREEN===========//
+  case ("GameOver"):
     background(0);
     
     //Box for background

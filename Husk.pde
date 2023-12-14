@@ -8,7 +8,7 @@ class Husk extends Enemy {
   @Override void drawEnemy() {
 
     //Mouth
-    fill(180, 196, 36); //zombie green
+    fill(79, 121, 66); //zombie green
     arc(enemyPos.x, enemyPos.y + 5, 20, 20, 0, PI); //bottom jaw
     arc(enemyPos.x, enemyPos.y - 5, 20, 20, PI, TWO_PI); //top jaw
 
