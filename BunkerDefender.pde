@@ -9,21 +9,20 @@ Title: Bunker Defender
  Description:
  - Use the mouse to aim down your sniper sight and press it to destroy the incoming horde of monsters!
  - Move about using the WASD keys. Press any other key to stop!
- - Beware of the husks and their large numbers! they get faster the closer they are!
- - Beware of the Oculus and its sights, which avoid your own!
- - Beware of the Fleshy, which although can only move cardinally, has bulk and speed to make up for it!
- - Beware of the Splitter, a ghastly ghoul that's hard to take down! It might seem docile, but take it down before it gets angry!
+ - Beware of the husks and their large numbers! they get faster the closer they are! (1 Shot)
+ - Beware of the Oculus and its sights, which avoid your own! (1 Shot)
+ - Beware of the Musculus, a nasty mutated rat that shoots projectiles towards you! its stronger than it looks! (2 Shots)
+ - Beware of the Gravish, a spooky radish ghoul that charges up a powerful barrage of mutant projectiles! (2 shots)
+ - Beware of the Fleshy, which although can only move cardinally, has bulk and speed to make up for it! (3 shots)
+ - Beware of the Splitter, a ghastly ghoul that's hard to take down! It might seem docile, but take it down before it gets angry! (3 shots)
  - Be careful though! you only have 6 bullets! if you run out of bullets, you'll have to wait before you can shoot any of the monsters again
  - Every time you kill a monster, you gain points!
  - If the monsters reach you, you lose! but don't fret, you can always try again by pressing the "continue" button!
  - The screen you get after your untimely demise will tell you your score! try and see how much higher you can make it!
  */
 
-//Note: I wasn't able to implement a few things, both from exhaustion and from a wish to keep the game generally well-balanced
-//This comes in the form of all the projectile enemies, which as you should be able to very quickly see, are missing
-//However, beyond that, the game is in a comfortably complete state. I meet the grand majority of the necessary skill inventories, and managed to expand
-//Upon the original bunker defense object oriented toy greatly
-//I hope you do enjoy it! It was quite fun despite the stress of this semester
+//Note: Some things have changed, but everything big in the planner is right here!
+//Hope you enjoy it!
 
 //======= Initializing variables  =======//
 int score; //score value
@@ -52,11 +51,12 @@ Oculus[] ocList = new Oculus[2]; //List of Oculus (or is it oculi?)
 Fleshy[] fleList = new Fleshy[1]; //List of fleshys
 Splitter[] splitList = new Splitter[1]; //list of splitters
 Musculus[] musList = new Musculus[2]; //list of Musculus
+Gravish[] gravList = new Gravish[2]; //list of Gravish
 //Credit to BUST THOSE GHOSTS! (by Jensen Verlaan) for teaching me how to do these lists!
 
 //Sets up a list that stores all the enemies by storing their different lists
 //Might be easier to just use for loops here?
-Enemy[][] enemyList = { huskList, ocList, fleList, splitList, musList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
+Enemy[][] enemyList = { huskList, ocList, fleList, splitList, musList, gravList }; //https://stackoverflow.com/questions/4781100/how-to-make-an-array-of-arrays-in-java
 //Found out how to do this from here
 
 //======= Setup! =======//
@@ -121,6 +121,10 @@ void draw() {
     for (int i = 0; i < musList.length; i++){
       musList[i] = new Musculus();
     }
+    //Initializes the Gravishes in gravish list
+    for (int i = 0; i < gravList.length; i++){
+      gravList[i] = new Gravish();
+    }
     
     //Resets the projectile list on reset.
     projList = new ArrayList<Projectile>();
@@ -157,7 +161,9 @@ void draw() {
     }
     
     //for every projectile in projectile list
-    for (int i = 0; i < projList.size(); i++){
+    //This one is a backwards for loop! Its there because this way I can clear up every projectile from the projectile list without issue
+    //I learned this from Assignment 4 (version control assignment)
+    for (int i = (projList.size() - 1); i >= 0; i--){
       projList.get(i).drawProjectile();
       projList.get(i).move();
       if (projList.get(i).projReachedPlayer() == true){
@@ -169,7 +175,7 @@ void draw() {
       }
     }
     //Print command used to verify whether or not this worked.
-    //print(projList);
+    print(projList);
     
     drawMark(); //draws the sniper mark over the mouse as well as the dotted line to it
 

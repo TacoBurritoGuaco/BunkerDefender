@@ -10,16 +10,16 @@ class Splitter extends Enemy {
   //Initializes the fleshy
   Splitter() {
     super();
-    health = 3; //sets the fleshy's health to 2
+    health = 3; //sets the health to 3
     randRange = 250; //the default range added/substracted from the random values in the "beenShot" function
     points = int(random(0 + randRange, 10 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
     weightChance = 6; //the default weight of the enemy spawns
 
-    //Sets the fleshy's speed
+    //Sets the splitter's speed
     enemySpeed.x = 0.1;
     enemySpeed.y = 0.1;
     
-    //Sets the fleshy's acceleration
+    //Sets the splitter's acceleration
     enemyAcc.x = 0.07;
     enemyAcc.y = 0.07;
 
@@ -51,7 +51,7 @@ class Splitter extends Enemy {
   @Override void drawEnemy() {
     
     //When the splitter appears on screen
-    if (enemyTimer >= 420) {
+    if (enemyTimer >= 720) {
       oppacity += 5;
     }
     
@@ -78,10 +78,16 @@ class Splitter extends Enemy {
     quad(enemyPos.x + 15, enemyPos.y - 23, enemyPos.x + 12, enemyPos.y - 18, enemyPos.x + 24, enemyPos.y - 6, enemyPos.x + 27, enemyPos.y - 10); //right quad
     rect(enemyPos.x - 8, enemyPos.y + 18, 15, 5); //bottom rectangle
     //This is done after outlines to give the teeth the same jittery effect of the eyes
-
-    fill(238, 75, 43); //Color of eyes (red)
-    circle(enemyPos.x - 4, enemyPos.y - 22, 5); //left eye
-    circle(enemyPos.x + 4, enemyPos.y - 22, 5); //right eye
+  
+    if (enemyTimer < 1180){
+      fill(238, 75, 43); //Color of eyes (red)
+      circle(enemyPos.x - 4, enemyPos.y - 22, 5); //left eye
+      circle(enemyPos.x + 4, enemyPos.y - 22, 5); //right eye
+    } else { //eyes are bigger and shake from left to right when angered
+      fill(238, 75, 43); //Color of eyes (red)
+      circle(enemyPos.x - 4 + ((float) Math.sin(frameCount * 0.75) * 1), enemyPos.y - 22, 8); //left eye
+      circle(enemyPos.x + 4 + ((float) Math.sin(frameCount * 0.75) * 1), enemyPos.y - 22, 8); //right eye
+    }
     noStroke(); //reset back to no stroke
   }
 
@@ -90,7 +96,7 @@ class Splitter extends Enemy {
   @Override void move() {
     enemyTimer += 1;
     //Timer waits for roughly 7 seconds before moving the enemy onto the screen
-    if (enemyTimer == 420) {
+    if (enemyTimer == 720) {
       float posListX[] = {random(player.playerPos.x - 60, player.playerPos.x - 70), random(player.playerPos.x + 60, player.playerPos.x + 70)}; //List of two randomized values that are in a range off of the player's x coordinates
       enemyPos.x = posListX[int(random(0, 2))]; //teleports the splitter somewhere on screen near the player
       float posListY[] = {random(player.playerPos.y - 60, player.playerPos.y - 70), random(player.playerPos.y + 60, player.playerPos.y + 70)}; //List of two randomized values that are in a range off of the player's y coordinates
@@ -99,7 +105,7 @@ class Splitter extends Enemy {
     //The randomizing is done this way to both prevent the enemy from telefragging the player and to make them spawn somewhere near the player's position
     
     //Timer waits for roughly 6 seconds before setting behavior to true
-    if (enemyTimer >= 780) {
+    if (enemyTimer >= 1180) {
       behavior = true;
     }
     

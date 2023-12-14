@@ -3,7 +3,7 @@
 //They shoot projectiles towards the player semi-infrequently that moves towards the last position the player was in.
 class Musculus extends Enemy {
 
-  //Initializes the oculus
+  //Initializes the Musculus
   Musculus() {
     super();
     health = 2; //health is set to 2
@@ -11,7 +11,7 @@ class Musculus extends Enemy {
     points = int(random(0 + randRange, 100 + randRange)); //sets point to 0 by default (since the points are not called until they are randomized again)
     weightChance = 8; //the default weight of the enemy spawns
 
-    //Sets the oculus' speed
+    //Sets the enemy' speed
     enemySpeed.x = 0.2;
     enemySpeed.y = 0.2;
 
@@ -30,7 +30,7 @@ class Musculus extends Enemy {
     health = 2; //resets the enemy's health
   }
 
-  //Draws the oculus
+  //Draws the Musculus
   @Override void drawEnemy() {
     
     fill(79, 121, 66); //zombie green
@@ -42,11 +42,29 @@ class Musculus extends Enemy {
     circle(enemyPos.x - 15, enemyPos.y - 15, 5); //left ear (inside)
     circle(enemyPos.x + 15, enemyPos.y - 15, 5); //right ear (inside)
     
+    rectMode(CENTER);
+    fill(255);
+    rect(enemyPos.x, enemyPos.y + 11, 5, 5); //teeth
+    rectMode(CORNER); //reset back to default
+    noFill();
+    stroke(0);
+    strokeWeight(2);
+    arc(enemyPos.x, enemyPos.y + 7, 10, 5, 0, PI); //smile
+    noStroke();//reset back to default
     
+    //Head Growths
+    fill(201, 204, 63);
+    circle(enemyPos.x, enemyPos.y - 5, 20 + ((float) Math.sin(frameCount * 0.15) * 2)); //pulsates
+    circle(enemyPos.x - 10, enemyPos.y - 7, 15);
+    circle(enemyPos.x + 10, enemyPos.y - 7, 15);
+    fill(180, 196, 36);
+    circle(enemyPos.x, enemyPos.y - 15, 12 + ((float) Math.sin(frameCount * 0.20) * 2)); //pulsates
+    circle(enemyPos.x - 7, enemyPos.y - 14, 8);
+    circle(enemyPos.x + 7, enemyPos.y - 14, 8);
     
   }
 
-  //Moves the Oculus
+  //Moves the Musculus
   //Credit to Lucas for helping me understand how to pull this off.
   @Override void move() {
   
@@ -58,6 +76,7 @@ class Musculus extends Enemy {
     enemyPos.add(directionVector(player.playerPos, this.enemyPos, this.enemySpeed)); //moves very very very slowly towards the player
   }
   
+  //Shoots the musculus projectile by adding a new projectile to the world's projectile list
   @Override void shootProjectile(){
     projList.add(new Projectile(enemyPos.x, enemyPos.y, player.playerPos.copy()));
   }

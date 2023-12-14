@@ -49,31 +49,31 @@ public class Player {
   void movePlayer(char theKey) {
     switch(theKey) {
       case('w'):
-      this.playerPos.y -= 1;
+      this.playerPos.y -= 1.2;
       break;
       case('W'):
-      this.playerPos.y -= 1;
+      this.playerPos.y -= 1.2;
       break;
 
       case('s'):
-      this.playerPos.y += 1;
+      this.playerPos.y += 1.2;
       break;
       case('S'):
-      this.playerPos.y += 1;
+      this.playerPos.y += 1.2;
       break;
 
       case('a'):
-      this.playerPos.x -= 1;
+      this.playerPos.x -= 1.2;
       break;
       case('A'):
-      this.playerPos.x -= 1;
+      this.playerPos.x -= 1.2;
       break;
 
       case('d'):
-      this.playerPos.x += 1;
+      this.playerPos.x += 1.2;
       break;
       case('D'):
-      this.playerPos.x += 1;
+      this.playerPos.x += 1.2;
       break;
     }
   }

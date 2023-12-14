@@ -31,8 +31,8 @@ class Enemy {
     //Change to a public function that returns the player's pVector position
     enemyPos = enemyLoc(randRange, weightChance);
     //default speed
-    enemySpeed.x = 0.3;
-    enemySpeed.y = 0.3;
+    enemySpeed.x = 0.2;
+    enemySpeed.y = 0.2;
     //default acceleration
     enemyAcc.x = 0.001;
     enemyAcc.y = 0.001;
@@ -44,8 +44,8 @@ class Enemy {
 
   void resetEnemy() {
     //resets to default speed
-    enemySpeed.x = 0.3;
-    enemySpeed.y = 0.3;
+    enemySpeed.x = 0.2;
+    enemySpeed.y = 0.2;
     points = int(random(0 + randRange, 5 + randRange)); //Resets how many points the enemy gives
     health = 1; //resets the enemy's health
   }
